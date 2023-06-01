@@ -938,7 +938,7 @@ class Markdown implements MarkdownInterface {
 		$level = $matches[2][0] == '=' ? 1 : 2;
 
 		// ID attribute generation
-		$idAtt = $this->_generateIdFromHeaderValue($matches[1]);
+		$idAtt = $this->_generateIdFromHeaderValue($matches[1], $level);
 
 		$block = "<h$level$idAtt>".$this->runSpanGamut($matches[1])."</h$level>";
 		return "\n" . $this->hashBlock($block) . "\n\n";
@@ -950,10 +950,11 @@ class Markdown implements MarkdownInterface {
 	 * @return string
 	 */
 	protected function _doHeaders_callback_atx($matches) {
-		// ID attribute generation
-		$idAtt = $this->_generateIdFromHeaderValue($matches[2]);
-
 		$level = strlen($matches[1]);
+
+		// ID attribute generation
+		$idAtt = $this->_generateIdFromHeaderValue($matches[2], $level);
+
 		$block = "<h$level$idAtt>".$this->runSpanGamut($matches[2])."</h$level>";
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
@@ -967,12 +968,12 @@ class Markdown implements MarkdownInterface {
 	 * @param  string $headerValue
 	 * @return string
 	 */
-	protected function _generateIdFromHeaderValue($headerValue) {
+	protected function _generateIdFromHeaderValue($headerValue, $level) {
 		if (!is_callable($this->header_id_func)) {
 			return "";
 		}
 
-		$idValue = call_user_func($this->header_id_func, $headerValue);
+		$idValue = call_user_func($this->header_id_func, $headerValue, $level);
 		if (!$idValue) {
 			return "";
 		}
