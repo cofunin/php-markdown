@@ -1607,7 +1607,7 @@ class Markdown implements MarkdownInterface {
 	 * @return string
 	 */
 	protected function doAutoLinks($text) {
-		$text = preg_replace_callback('{<((https?|ftp|dict|tel):[^\'">\s]+)>}i',
+		$text = preg_replace_callback('{(\b(https?|ftp|dict|tel)+:[\/]{2}[^\s<]+\b\/*+)}i',
 			array($this, '_doAutoLinks_url_callback'), $text);
 
 		// Email addresses: <address@domain.foo>
